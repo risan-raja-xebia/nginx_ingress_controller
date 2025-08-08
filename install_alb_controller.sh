@@ -42,9 +42,11 @@ fi
 
 # Clean up the downloaded file
 # rm iam_policy.json
+echo "✅ Step 2: Associating IAM OIDC provider..."
+eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=test --approve
 
 # Step 2: Create the IAM Role and Service Account using eksctl
-echo "✅ Step 2: Creating IAM Role and Service Account via eksctl..."
+echo "✅ Step 3: Creating IAM Role and Service Account via eksctl..."
 # This command uses eksctl to create an IAM role, a Kubernetes service account in the kube-system namespace,
 # and associates them using IAM Roles for Service Accounts (IRSA).
 eksctl create iamserviceaccount \
@@ -57,10 +59,6 @@ eksctl create iamserviceaccount \
   --approve
 
 echo "IAM Role and Service Account 'aws-load-balancer-controller' created and associated."
-
-
-echo "✅ Step 3: Associating IAM OIDC provider..."
-eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=test --approve
 
 echo "✅ Step 4: Installing the AWS Load Balancer Controller via Helm..."
 # Add the EKS chart repository
