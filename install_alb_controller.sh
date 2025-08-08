@@ -88,3 +88,11 @@ kubectl get deployment -n kube-system aws-load-balancer-controller
 
 echo "--- 🧑‍💻 AWS Load Balancer Controller installation script finished ---"
 echo "You can now create Ingress or Service objects with the required annotations."
+
+echo "✅ Step 6: Install the Nginx Ingress Controller"
+cd nginx;
+kubectl apply -f .
+
+echo "✅ Step 7: Install the NLB Service"
+cd ..
+kubectl apply -f nlb-service.yaml
