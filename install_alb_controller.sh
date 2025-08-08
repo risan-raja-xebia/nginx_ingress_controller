@@ -58,9 +58,11 @@ eksctl create iamserviceaccount \
 
 echo "IAM Role and Service Account 'aws-load-balancer-controller' created and associated."
 
-# Step 3: Install the controller using Helm
-echo "✅ Step 3: Installing the AWS Load Balancer Controller via Helm..."
 
+echo "✅ Step 3: Associating IAM OIDC provider..."
+eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=test
+
+echo "✅ Step 4: Installing the AWS Load Balancer Controller via Helm..."
 # Add the EKS chart repository
 helm repo add eks https://aws.github.io/eks-charts
 
@@ -77,7 +79,7 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 echo "Helm chart installed successfully."
 
 # Step 4: Verify the installation
-echo "✅ Step 4: Verifying the controller deployment..."
+echo "✅ Step 5: Verifying the controller deployment..."
 # Wait for a moment to allow pods to be created
 sleep 15
 kubectl get deployment -n kube-system aws-load-balancer-controller
