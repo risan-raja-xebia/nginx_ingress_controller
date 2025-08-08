@@ -1,66 +1,66 @@
 # NGINX Ingress Controller - Separated Configuration Files
 
-This directory contains the NGINX Ingress Controller configuration files separated by component type for better organization and maintainability.
+This directory contains the NGINX Ingress Controller configuration files separated by component type and numbered in the order they should be executed for proper dependency resolution.
 
-## File Structure
+## File Structure (in execution order)
 
-- `namespace.yaml` - Namespace definition for ingress-nginx
-- `serviceaccounts.yaml` - Service accounts for controller and admission webhook
-- `rbac.yaml` - All RBAC resources (Roles, ClusterRoles, RoleBindings, ClusterRoleBindings)
-- `configmap.yaml` - Configuration map for the controller
-- `services.yaml` - LoadBalancer and ClusterIP services
-- `deployment.yaml` - Main controller deployment
-- `jobs.yaml` - Admission webhook certificate generation jobs
-- `ingressclass.yaml` - IngressClass definition
-- `webhook.yaml` - ValidatingWebhookConfiguration
+- `01-namespace.yaml` - Namespace definition for ingress-nginx
+- `02-rbac.yaml` - All RBAC resources (Roles, ClusterRoles, RoleBindings, ClusterRoleBindings)
+- `03-serviceaccounts.yaml` - Service accounts for controller and admission webhook
+- `04-configmap.yaml` - Configuration map for the controller
+- `05-services.yaml` - LoadBalancer and ClusterIP services
+- `06-deployment.yaml` - Main controller deployment
+- `07-jobs.yaml` - Admission webhook certificate generation jobs
+- `08-ingressclass.yaml` - IngressClass definition
+- `09-webhook.yaml` - ValidatingWebhookConfiguration
 
 ## Deployment Order
 
-Apply the files in the following order to ensure proper dependency resolution:
+Apply the files in numerical order to ensure proper dependency resolution:
 
 1. **Namespace** (required first)
    ```bash
-   kubectl apply -f namespace.yaml
+   kubectl apply -f nginx/01-namespace.yaml
    ```
 
 2. **RBAC** (required for service accounts and permissions)
    ```bash
-   kubectl apply -f rbac.yaml
+   kubectl apply -f nginx/02-rbac.yaml
    ```
 
 3. **Service Accounts** (required for pods)
    ```bash
-   kubectl apply -f serviceaccounts.yaml
+   kubectl apply -f nginx/03-serviceaccounts.yaml
    ```
 
 4. **ConfigMap** (configuration for controller)
    ```bash
-   kubectl apply -f configmap.yaml
+   kubectl apply -f nginx/04-configmap.yaml
    ```
 
 5. **Services** (LoadBalancer and admission webhook service)
    ```bash
-   kubectl apply -f services.yaml
+   kubectl apply -f nginx/05-services.yaml
    ```
 
 6. **Deployment** (main controller)
    ```bash
-   kubectl apply -f deployment.yaml
+   kubectl apply -f nginx/06-deployment.yaml
    ```
 
 7. **Jobs** (admission webhook certificate generation)
    ```bash
-   kubectl apply -f jobs.yaml
+   kubectl apply -f nginx/07-jobs.yaml
    ```
 
 8. **IngressClass** (defines the ingress class)
    ```bash
-   kubectl apply -f ingressclass.yaml
+   kubectl apply -f nginx/08-ingressclass.yaml
    ```
 
 9. **Webhook** (validating webhook configuration)
    ```bash
-   kubectl apply -f webhook.yaml
+   kubectl apply -f nginx/09-webhook.yaml
    ```
 
 ## Alternative: Apply All at Once
@@ -68,7 +68,7 @@ Apply the files in the following order to ensure proper dependency resolution:
 You can also apply all files at once using:
 
 ```bash
-kubectl apply -f .
+kubectl apply -f nginx/
 ```
 
 ## Verification
@@ -91,4 +91,5 @@ kubectl get ingressclass nginx
 - The LoadBalancer service is configured for AWS with internal scheme and specific subnets
 - SSL redirect is enabled by default
 - The controller uses version 1.12.3 of the NGINX Ingress Controller
-- All resources are labeled consistently for easy management 
+- All resources are labeled consistently for easy management
+- Files are numbered in the order they should be executed for proper dependency resolution 
