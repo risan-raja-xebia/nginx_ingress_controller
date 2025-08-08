@@ -14,6 +14,16 @@ This directory contains the NGINX Ingress Controller configuration files separat
 - `08-ingressclass.yaml` - IngressClass definition
 - `09-webhook.yaml` - ValidatingWebhookConfiguration
 
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+    service.beta.kubernetes.io/aws-load-balancer-name: nginx-load-balancer
+    service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-0a1123eb7a53067b8, subnet-005d4443220a8175a
+    service.beta.kubernetes.io/aws-load-balancer-private-ipv4-addresses: 10.0.2.156, 10.0.1.210
+
 ## Deployment Order
 
 Apply the files in numerical order to ensure proper dependency resolution:

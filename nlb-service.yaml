@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlb-for-nginx
+  namespace: ingress-nginx # Must be the same namespace as your NGINX controller
+  annotations:
+    # Specifies that the AWS Load Balancer Controller should manage this service
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+    service.beta.kubernetes.io/aws-load-balancer-name: nginx-load-balancer
+    service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-0a1123eb7a53067b8, subnet-005d4443220a8175a
+    service.beta.kubernetes.io/aws-load-balancer-private-ipv4-addresses: 10.0.2.156, 10.0.1.210
+spec:
+  # The `type: LoadBalancer` tells Kubernetes to expect a cloud load balancer.
+  # The AWS Load Balancer Controller will fulfill this request.
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: http # This should match the name of the port on the NGINX controller's service
+      protocol: TCP
+      name: http
+    - port: 443
+      targetPort: https
+      protocol: TCP
+      name: https
+  # This selector MUST match the labels of your NGINX Ingress Controller pods.
+  # Use `kubectl get pods -n ingress-nginx --show-labels` to verify the correct labels.
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
