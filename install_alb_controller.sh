@@ -15,6 +15,7 @@ AWS_REGION="us-east-1"
 
 # Automatically fetch AWS Account ID
 AWS_ACCOUNT_ID=427942813953
+VPC_ID="vpc-052ba1d53c34d9895"
 
 # --- Script starts here ---
 set -e # Exit immediately if a command exits with a non-zero status.
@@ -67,14 +68,15 @@ helm repo add eks https://aws.github.io/eks-charts
 # Update your local repo to make sure you have the latest charts
 helm repo update eks
 
+
 # Install the Helm chart
 helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
   --set clusterName=$CLUSTER_NAME \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
-  --set region=us-east-1 \
-  --set vpcId=vpc-052ba1d53c34d9895
+  --set region=$AWS_REGION \
+  --set vpcId=$VPC_ID
 
 echo "Helm chart installed successfully."
 
