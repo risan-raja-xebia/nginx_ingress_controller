@@ -72,7 +72,9 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
   -n kube-system \
   --set clusterName=$CLUSTER_NAME \
   --set serviceAccount.create=false \
-  --set serviceAccount.name=aws-load-balancer-controller
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=us-east-1 \
+  --set vpcId=vpc-052ba1d53c34d9895
 
 echo "Helm chart installed successfully."
 
