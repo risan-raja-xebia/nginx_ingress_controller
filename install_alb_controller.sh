@@ -60,7 +60,7 @@ echo "IAM Role and Service Account 'aws-load-balancer-controller' created and as
 
 
 echo "✅ Step 3: Associating IAM OIDC provider..."
-eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=test
+eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=test --approve
 
 echo "✅ Step 4: Installing the AWS Load Balancer Controller via Helm..."
 # Add the EKS chart repository
